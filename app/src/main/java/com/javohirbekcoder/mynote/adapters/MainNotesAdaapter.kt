@@ -12,7 +12,7 @@ import com.javohirbekcoder.mynote.models.MainRecyclerModel
 /*
 Created by Javohirbek on 16.04.2023 at 18:06
 */
-class MainNotesAdapter(val mContext: Context,val itemsList: ArrayList<MainRecyclerModel>) : RecyclerView.Adapter<MainNotesAdapter.MyViewHolder>() {
+class MainNotesAdapter(val mContext: Context,val itemsList: ArrayList<MainRecyclerModel>, val mListener:myItemOnClick) : RecyclerView.Adapter<MainNotesAdapter.MyViewHolder>(){
 
     private val color  = arrayListOf(
        R.drawable.color_green,
@@ -28,6 +28,7 @@ class MainNotesAdapter(val mContext: Context,val itemsList: ArrayList<MainRecycl
                 colorImage.setImageDrawable(drawable)
                 rvItemTitle.text = mainRecyclerModel.title
                 rvItemNote.text = mainRecyclerModel.note
+                timeTxt.text = mainRecyclerModel.time
             }
         }
 
@@ -43,5 +44,19 @@ class MainNotesAdapter(val mContext: Context,val itemsList: ArrayList<MainRecycl
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.onBind(itemsList[position])
+
+        holder.binding.cardView.setOnClickListener {
+            mListener.mItemClickListener(position)
+        }
+
+        holder.binding.cardView.setOnLongClickListener {
+            mListener.onLongClickListener(position)
+            true
+        }
+    }
+
+    interface myItemOnClick{
+        fun mItemClickListener(position: Int)
+        fun onLongClickListener(position: Int)
     }
 }

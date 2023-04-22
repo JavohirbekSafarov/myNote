@@ -11,7 +11,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
     <style name="CardView.BackgroudColor">
-        <item name="android:backgroundTint">#D8D8D8</item>
+        <item name="android:backgroundTint">#6191DB</item>
     </style>
 
     <style name="myText">

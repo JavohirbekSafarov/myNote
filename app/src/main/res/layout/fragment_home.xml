@@ -37,7 +37,7 @@
                 android:fontFamily="@font/delius"
                 android:hint="@string/search"
                 android:singleLine="true"
-                android:textColorHint="#072244" />
+                android:textColorHint="#3C618F" />
 
         </androidx.cardview.widget.CardView>
 

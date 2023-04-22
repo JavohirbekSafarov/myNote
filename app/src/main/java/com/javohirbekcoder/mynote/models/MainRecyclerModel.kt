@@ -1,7 +1,7 @@
 package com.javohirbekcoder.mynote.models
 
 import android.graphics.Color
-
+import android.os.Parcelable
 
 /*
 Created by Javohirbek on 16.04.2023 at 18:17
