@@ -15,7 +15,6 @@ import com.javohirbekcoder.mynote.database.DatabaseHelper
 import com.javohirbekcoder.mynote.databinding.FragmentHomeBinding
 import com.javohirbekcoder.mynote.models.MainRecyclerModel
 
-
 class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOnClick {
 
     private var _binding: FragmentHomeBinding? = null
@@ -89,19 +88,18 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     }
 
     private fun setRecyclerAdapter() {
-
         databaseHelper = DatabaseHelper(requireContext())
         mainRecyclerItem.clear()
         readDataFromDatabase()
 
         mainNotesAdapter = MainNotesAdapter(requireContext(), mainRecyclerItem, this)
 
-        if (mainRecyclerItem.isEmpty()){
+        if (mainRecyclerItem.isEmpty()) {
             binding.mainRecyclerview.visibility = View.INVISIBLE
             binding.emptyListLayout.visibility = View.VISIBLE
 
             binding.allNotesCount.text = "0"
-        }else{
+        } else {
             binding.mainRecyclerview.visibility = View.VISIBLE
             binding.emptyListLayout.visibility = View.INVISIBLE
 
@@ -113,14 +111,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     private fun readDataFromDatabase() {
         val cursor = databaseHelper.readNote()
         if (cursor.count > 0) {
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 val id = cursor.getInt(0)
                 val title = cursor.getString(1)
                 val note = cursor.getString(2)
                 val date = cursor.getString(3)
                 val colorIndex = cursor.getInt(4)
 
-                val  item = MainRecyclerModel(id, colorIndex, title, note, date)
+                val item = MainRecyclerModel(id, colorIndex, title, note, date)
                 mainRecyclerItem.add(item)
             }
         }
@@ -149,24 +147,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
                 position: Int,
                 id: Long
             ) {
-                 when (position) {
-                     0 -> {
-                         mainRecyclerItem.sortBy { it.time }
-                         mainRecyclerItem.reverse()
-                     }
-                     1 -> {
-                         mainRecyclerItem.sortBy { it.time }
-                     }
-                     2 -> {
-                         mainRecyclerItem.sortBy { it.colorIndex }
-                     }
-                     3 -> {
-                         mainRecyclerItem.sortBy { it.title }
-                     }
-                     else -> {
-                         mainRecyclerItem.sortBy { it.time }
-                     }
-                 }
+                when (position) {
+                    0 -> {
+                        mainRecyclerItem.sortBy { it.time }
+                        mainRecyclerItem.reverse()
+                    }
+                    1 -> {
+                        mainRecyclerItem.sortBy { it.time }
+                    }
+                    2 -> {
+                        mainRecyclerItem.sortBy { it.colorIndex }
+                    }
+                    3 -> {
+                        mainRecyclerItem.sortBy { it.title }
+                    }
+                    else -> {
+                        mainRecyclerItem.sortBy { it.time }
+                    }
+                }
                 mainNotesAdapter.notifyItemRangeChanged(0, mainRecyclerItem.size)
             }
 
@@ -182,7 +180,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     }
 
     override fun mItemClickListener(position: Int) {
-        val bundle =  Bundle()
+        val bundle = Bundle()
         bundle.putInt("id", mainRecyclerItem[position].id)
         bundle.putString("title", mainRecyclerItem[position].title)
         bundle.putString("note", mainRecyclerItem[position].note)
@@ -193,7 +191,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
 
     override fun onLongClickListener(position: Int) {
         databaseHelper.deleteNote(mainRecyclerItem[position].title)
-        setRecyclerAdapter()
+        mainRecyclerItem.removeAt(position)
+        mainNotesAdapter.notifyItemRemoved(position)
+        binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
     }
 
 }

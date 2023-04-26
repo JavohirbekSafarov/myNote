@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.javohirbekcoder.mynote.R
@@ -40,9 +41,9 @@ class OpenNoteFragment : Fragment(R.layout.fragment_open_note) {
 
         val index = requireArguments().getInt("id")
         val colorIndex = requireArguments().getInt("colorIndex")
-        val title = requireArguments().getString("title")
-        val note  = requireArguments().getString("note")
-        val time  = requireArguments().getString("time")
+        var title = requireArguments().getString("title")
+        var note  = requireArguments().getString("note")
+        var time  = requireArguments().getString("time")
 
         binding.titeText.setText(title)
         binding.titleTextMain.setText(title)
@@ -57,16 +58,17 @@ class OpenNoteFragment : Fragment(R.layout.fragment_open_note) {
             val currentDateTime = Calendar.getInstance().time
             val dateFormat = SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault())
             val formattedDateTime = dateFormat.format(currentDateTime)
+            title = binding.titeText.text.toString()
+            note = binding.noteText.text.toString()
 
             if (checkData()){
-                databaseHelper.insertNote(binding.titeText.text.toString().trim(), binding.noteText.text.toString(), formattedDateTime, 0)
+                databaseHelper.updateNote(index.toString(), title!!, note!!, formattedDateTime, selectedColorIndex)
             }
         }
         binding.selectColorBtn.setOnClickListener {
             val select_color_dialog = Dialog(requireContext())
             select_color_dialog.setContentView(R.layout.color_picker_dialog)
             select_color_dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-
 
             val greenBtn = select_color_dialog.findViewById<ImageView>(R.id.color_picker_green)
             val pinkBtn = select_color_dialog.findViewById<ImageView>(R.id.color_picker_pink)
@@ -104,10 +106,21 @@ class OpenNoteFragment : Fragment(R.layout.fragment_open_note) {
         }
 
         binding.myScrollView.setOnClickListener {
+
             binding.titeText.visibility = View.VISIBLE
             binding.saveBtn.visibility = View.VISIBLE
             binding.selectColorBtn.visibility = View.VISIBLE
+            binding.noteText.requestFocus()
+
         }
+
+        binding.titeText.doOnTextChanged { text, start, before, count ->
+            if (text.isNullOrEmpty())
+                binding.titleTextMain.text = "Your title"
+            else
+                binding.titleTextMain.text = text
+        }
+
         binding.noteText.setOnClickListener {
             binding.titeText.visibility = View.VISIBLE
             binding.saveBtn.visibility = View.VISIBLE
