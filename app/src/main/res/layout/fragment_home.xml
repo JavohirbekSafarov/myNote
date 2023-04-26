@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/delius"
                 android:gravity="end"
-                android:text="3"
+                android:text="@string/_0"
                 android:textSize="18sp" />
 
         </LinearLayout>
@@ -107,10 +107,10 @@
         android:id="@+id/mainRecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="160dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linear"
@@ -181,6 +181,35 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_list_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/empty_list_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty_list"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/empty_list_text"
+            style="@style/myText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="You do not have notes yet!"
+            android:textSize="17sp" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

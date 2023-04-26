@@ -96,7 +96,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last modifield    "
+            android:text="Last modified on "
             android:textSize="11sp"
             android:fontFamily="serif"
             style="@style/myText"
@@ -104,6 +104,7 @@
 
         <TextView
             android:id="@+id/timeTV"
+            android:layout_marginStart="8dp"
             android:text="12:45 12.02.2023"
             android:textSize="11sp"
             style="@style/myText"
@@ -128,17 +129,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
+            android:id="@+id/myScrollView"
             android:scrollbars="vertical">
 
-            <EditText
-                android:id="@+id/noteText"
-                style="@style/myText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:fontFamily="@font/delius"
-                android:hint="Your note"
-                android:textColorHint="#3C618F" />
+                android:orientation="vertical"
+                >
+                <EditText
+                    android:id="@+id/noteText"
+                    style="@style/myText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:fontFamily="@font/delius"
+                    android:hint="Your note"
+                    android:textColorHint="#3C618F" />
+            </LinearLayout>
         </ScrollView>
 
 

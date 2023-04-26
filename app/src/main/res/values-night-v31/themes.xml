@@ -6,7 +6,7 @@
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#5678F1</item>
         <item name="android:statusBarColor">#1d2733</item>
 
         <item name="android:windowBackground">#1d2733</item>

@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.javohirbekcoder.mynote.R
 import com.javohirbekcoder.mynote.adapters.MainNotesAdapter
+import com.javohirbekcoder.mynote.database.DatabaseHelper
 import com.javohirbekcoder.mynote.databinding.FragmentHomeBinding
 import com.javohirbekcoder.mynote.models.MainRecyclerModel
 
@@ -21,6 +21,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var mainNotesAdapter: MainNotesAdapter
+
+    private lateinit var databaseHelper: DatabaseHelper
 
     private var searching = false
 
@@ -87,14 +89,41 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     }
 
     private fun setRecyclerAdapter() {
-        mainRecyclerItem.add(MainRecyclerModel(2, "3", "note", "11.02.2022"))
-        mainRecyclerItem.add(MainRecyclerModel(1, "1", "note", "12.02.2022"))
-        mainRecyclerItem.add(MainRecyclerModel(3, "2", "note", "09.02.2022"))
-        mainRecyclerItem.add(MainRecyclerModel(0, "5", "note last", "08.02.2022"))
-        mainRecyclerItem.add(MainRecyclerModel(3, "4", "note", "13.02.2022"))
+
+        databaseHelper = DatabaseHelper(requireContext())
+        mainRecyclerItem.clear()
+        readDataFromDatabase()
+
         mainNotesAdapter = MainNotesAdapter(requireContext(), mainRecyclerItem, this)
-        binding.mainRecyclerview.adapter = mainNotesAdapter
-        binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
+
+        if (mainRecyclerItem.isEmpty()){
+            binding.mainRecyclerview.visibility = View.INVISIBLE
+            binding.emptyListLayout.visibility = View.VISIBLE
+
+            binding.allNotesCount.text = "0"
+        }else{
+            binding.mainRecyclerview.visibility = View.VISIBLE
+            binding.emptyListLayout.visibility = View.INVISIBLE
+
+            binding.mainRecyclerview.adapter = mainNotesAdapter
+            binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
+        }
+    }
+
+    private fun readDataFromDatabase() {
+        val cursor = databaseHelper.readNote()
+        if (cursor.count > 0) {
+            while (cursor.moveToNext()){
+                val id = cursor.getInt(0)
+                val title = cursor.getString(1)
+                val note = cursor.getString(2)
+                val date = cursor.getString(3)
+                val colorIndex = cursor.getInt(4)
+
+                val  item = MainRecyclerModel(id, colorIndex, title, note, date)
+                mainRecyclerItem.add(item)
+            }
+        }
     }
 
     private fun setStatusBarColor() {
@@ -120,11 +149,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    requireContext(),
-                    parent.getItemAtPosition(position).toString(),
-                    Toast.LENGTH_LONG
-                ).show()
                  when (position) {
                      0 -> {
                          mainRecyclerItem.sortBy { it.time }
@@ -143,29 +167,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
                          mainRecyclerItem.sortBy { it.time }
                      }
                  }
-               /* mainRecyclerItem.sortBy {
-                    when (position) {
-                        0 -> {
-                            it.time
-                        }
-                        1 -> {
-                            it.time
-                        }
-                        //add color
-                        2 -> {
-                            it.time
-                            mainRecyclerItem.reverse()
-                        }
-                        3 -> {
-                            it.time
-                        }
-                        else -> {
-                            it.time
-                        }
-                    }
-                }*/
-                //mainRecyclerItem.clear()
-                //mainRecyclerItem.addAll(newList)
                 mainNotesAdapter.notifyItemRangeChanged(0, mainRecyclerItem.size)
             }
 
@@ -181,8 +182,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     }
 
     override fun mItemClickListener(position: Int) {
-        Toast.makeText(requireContext(), mainRecyclerItem[position].title, Toast.LENGTH_SHORT).show()
         val bundle =  Bundle()
+        bundle.putInt("id", mainRecyclerItem[position].id)
         bundle.putString("title", mainRecyclerItem[position].title)
         bundle.putString("note", mainRecyclerItem[position].note)
         bundle.putString("time", mainRecyclerItem[position].time)
@@ -191,7 +192,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
     }
 
     override fun onLongClickListener(position: Int) {
-        Toast.makeText(requireContext(), "Deleting?", Toast.LENGTH_SHORT).show()
+        databaseHelper.deleteNote(mainRecyclerItem[position].title)
+        setRecyclerAdapter()
     }
 
 }
