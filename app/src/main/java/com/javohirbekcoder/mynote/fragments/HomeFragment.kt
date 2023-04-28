@@ -93,19 +93,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
         readDataFromDatabase()
 
         mainNotesAdapter = MainNotesAdapter(requireContext(), mainRecyclerItem, this)
+        binding.mainRecyclerview.adapter = mainNotesAdapter
 
-        if (mainRecyclerItem.isEmpty()) {
-            binding.mainRecyclerview.visibility = View.INVISIBLE
-            binding.emptyListLayout.visibility = View.VISIBLE
-
-            binding.allNotesCount.text = "0"
-        } else {
-            binding.mainRecyclerview.visibility = View.VISIBLE
-            binding.emptyListLayout.visibility = View.INVISIBLE
-
-            binding.mainRecyclerview.adapter = mainNotesAdapter
-            binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
-        }
+        setEmptyLayout()
     }
 
     private fun readDataFromDatabase() {
@@ -194,6 +184,22 @@ class HomeFragment : Fragment(R.layout.fragment_home), MainNotesAdapter.myItemOn
         mainRecyclerItem.removeAt(position)
         mainNotesAdapter.notifyItemRemoved(position)
         binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
+
+        setEmptyLayout()
+    }
+
+    private fun setEmptyLayout() {
+        if (mainRecyclerItem.isEmpty()) {
+            binding.mainRecyclerview.visibility = View.INVISIBLE
+            binding.emptyListLayout.visibility = View.VISIBLE
+
+            binding.allNotesCount.text = "0"
+        } else {
+            binding.mainRecyclerview.visibility = View.VISIBLE
+            binding.emptyListLayout.visibility = View.INVISIBLE
+
+            binding.allNotesCount.text = mainNotesAdapter.itemCount.toString()
+        }
     }
 
 }

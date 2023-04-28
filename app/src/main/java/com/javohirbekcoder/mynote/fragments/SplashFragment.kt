@@ -26,8 +26,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     ): View {
         _binding = FragmentSplashBinding.inflate(inflater)
 
-        //activity.window.setFlags(WindowManager.LayoutParams.SCree)
-
         Handler(Looper.getMainLooper()).postDelayed({
             lifecycleScope.launchWhenResumed {
                 findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
