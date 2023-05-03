@@ -50,6 +50,7 @@ class OpenNoteFragment : Fragment(R.layout.fragment_open_note) {
         binding.noteText.setText(note)
         binding.timeTV.setText(time)
         setTheme(colorIndex)
+        selectedColorIndex = colorIndex
 
 
         binding.saveBtn.setOnClickListener {

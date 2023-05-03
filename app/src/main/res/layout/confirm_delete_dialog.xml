@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="30dp"
+            android:fontFamily="serif"
             android:text="Are you sure want to delete "
             android:textColor="@color/black"
             android:textSize="17sp"
@@ -60,33 +61,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
             app:layout_constraintTop_toBottomOf="@+id/question_textView">
 
             <Button
                 android:id="@+id/cancel_button"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:backgroundTint="#D9D9D9"
                 android:fontFamily="serif"
                 android:text="Cancel"
                 android:textColor="@color/black"
-                android:layout_marginEnd="5dp"/>
+                app:cornerRadius="10dp"
+                style="?android:attr/buttonBarButtonStyle" />
+
             <Button
                 android:id="@+id/yes_button"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:backgroundTint="#80F005C9"
                 android:fontFamily="serif"
                 android:text="Yes"
-                android:layout_marginStart="5dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                app:cornerRadius="10dp"
+                style="?android:attr/buttonBarButtonStyle" />
 
         </LinearLayout>
 
